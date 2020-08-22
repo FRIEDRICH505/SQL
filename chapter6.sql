@@ -70,21 +70,115 @@ ADD COLUMN sci_fi CHAR(1);
 ALTER TABLE movie_table
 ADD COLUMN for_kids CHAR(1);
 
-INSERT INTO movie_table (drama, comedy, action, gore, sci_fi, for_kids, cartoon)
-VALUES
- ('F', 'T', 'F', 'F', 'F', 'T', 'T');
-INSERT INTO movie_table (drama, comedy, action, gore, sci_fi, for_kids, cartoon)
-VALUES
- ('F', 'F', 'T', 'T', 'F', 'F', 'F');
-INSERT INTO movie_table (drama, comedy, action, gore, sci_fi, for_kids, cartoon)
-VALUES
- ('T', 'F', 'F', 'F', 'F', 'F', 'F');
-INSERT INTO movie_table (drama, comedy, action, gore, sci_fi, for_kids, cartoon)
-VALUES
- ('F', 'T', 'F', ' F', 'F', 'F', 'F');
-INSERT INTO movie_table (drama, comedy, action, gore, sci_fi, for_kids, cartoon)
-VALUES
- ('F', 'F', 'T', 'T', 'F', 'F', 'F');
-INSERT INTO movie_table (drama, comedy, action, gore, sci_fi, for_kids, cartoon)
-VALUES 
-('T', 'F', 'F', 'F', 'F', 'F', 'F');
+UPDATE movie_table SET category = 'drama' where drama = 'T';
+UPDATE movie_table SET category = 'comedy' where comedy = 'T';
+UPDATE movie_table SET category = 'action' where action = 'T';
+UPDATE movie_table SET category = 'horror' where gore = 'T';
+UPDATE movie_table SET category = 'family' where for_kids = 'T';
+UPDATE movie_table SET category = 'family' where cartoon = 'T' AND rating = 'G';
+UPDATE movie_table SET category = 'misc' where cartoon = 'T' AND rating <> 'G';
+
+UPDATE movie_table
+SET category =
+CASE
+WHEN drama = 'T' THEN 'drama'
+WHEN comedy = 'T' THEN 'comedy'
+WHEN action = 'T' THEN 'action'
+WHEN gore = 'T' THEN 'horror'
+WHEN for_kids = 'T' THEN 'family'
+WHEN cartoon = 'T' THEN 'family'
+ELSE 'misc'
+END
+
+SELECT title, category, purchased
+FROM movie_table
+ORDER BY category, purchased;
+
+SELECT * FROM movie_table
+ORDER BY category, purchased, title;
+
+SELECT title, purchased
+FROM movie_table
+ORDER BY title ASC, purchased DESC;
+
+SELECT SUM(sales)
+FROM cookie_sales
+WHERE first_name = 'Nicole';
+--'98.23'
+
+SELECT first_name, SUM(sales)
+FROM cookie_sales
+GROUP BY first_name
+ORDER BY SUM(sales)DESC;
+--'Britney', '107.91'
+--'Nicole', '98.23'
+--'Ashley', '96.03'
+--'Lindsey', '81.08'
+
+SELECT first_name, AVG(sales)
+FROM cookie_sales
+GROUP BY first_name
+--'Lindsey', '11.582857'
+--'Nicole', '14.032857'
+--'Britney', '15.415714'
+--'Ashley', '13.718571'
+
+SELECT first_name, MAX(sales)
+FROM cookie_sales
+GROUP BY first_name;
+--'Lindsey', '32.02'
+--'Nicole', '31.99'
+--'Britney', '43.21'
+--'Ashley', '26.82'
+
+SELECT first_name, MIN(sales)
+FROM cookie_sales
+GROUP BY first_name;
+--'Lindsey', '0.00'
+--'Nicole', '0.00'
+--'Britney', '2.58'
+--'Ashley', '0.00'
+
+SELECT first_name, AVG(sales)
+FROM cookie_sales
+GROUP BY first_name;
+
+--'Lindsey', '11.582857'
+--'Nicole', '14.032857'
+--'Britney', '15.415714'
+--'Ashley', '13.718571'
+
+SELECT COUNT(sale_date)
+FROM cookie_sales;
+--'28'
+
+SELECT DISTINCT sale_date
+FROM cookie_sales
+ORDER BY sale_date;
+--'2007-03-06'
+--'2007-03-07'
+--'2007-03-08'
+--'2007-03-09'
+--'2007-03-10'
+
+SELECT COUNT(DISTINCT sale_date)
+FROM cookie_sales;
+--'7'
+
+SELECT first_name, SUM(sales)
+FROM cookie_sales
+GROUP BY first_name
+ORDER BY SUM(sales)DESC;
+--'Britney', '107.91'
+--'Nicole', '98.23'
+--'Ashley', '96.03'
+--'Lindsey', '81.08'
+
+SELECT first_name, SUM(sales)
+FROM cookie_sales
+GROUP BY first_name
+ORDER BY SUM(sales)DESC
+LIMIT 2;
+--'Britney', '107.91'
+--'Nicole', '98.23'
+
